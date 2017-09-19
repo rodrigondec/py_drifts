@@ -2,6 +2,10 @@ import pygame
 from pygame.locals import *
 from texture_bank import TextureBank
 from player import Player
+from ball import Pointer, Murderer, Saver
+from random import randrange
+from threading import Thread
+from time import sleep
 
 
 class Drifts:
@@ -13,6 +17,8 @@ class Drifts:
         self._sprites = {}
         self._clock = pygame.time.Clock()
 
+        self._thread_controller_balls = Thread(target=self.spawner_balls)
+
     def on_init(self):
         pygame.init()
         pygame.display.set_caption('Drifts')
@@ -22,22 +28,42 @@ class Drifts:
         self._running = True
 
         self._sprites['player'] = Player()
+        self._sprites['balls'] = []
+        self._thread_controller_balls.start()
+
+    def create_ball(self):
+        randomt = randrange(1, 10)
+        if 1 <= randomt <= 4:
+            ball = Pointer()
+        elif 5 <= randomt <= 8:
+            ball = Murderer()
+        else:
+            ball = Saver()
+        self._sprites['balls'].append(ball)
+
+    def spawner_balls(self):
+        while self._running:
+            qt_balls = randrange(1, 3)
+            for i in range(0, qt_balls):
+                self.create_ball()
+            sleep(3)
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
 
     def on_loop(self):
-        for key, sprite in self._sprites.items():
+        self._sprites['player'].update()
+        for sprite in self._sprites['balls']:
             sprite.update()
-        # self._player.update()
 
     def render(self, sprite):
         self._display.blit(sprite.image, sprite.rect)
 
     def on_render(self):
         self._display.blit(TextureBank['BACKGROUND'], [0, 0])
-        for key, sprite in self._sprites.items():
+        self.render(self._sprites['player'])
+        for sprite in self._sprites['balls']:
             self.render(sprite)
         pygame.display.flip()
 

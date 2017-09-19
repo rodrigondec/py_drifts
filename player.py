@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         screen = pygame.display.get_surface()
         # super().__init__(surface, image)
         self.image = image
-        # self.area = screen.get_rect()
+        self.area = screen.get_rect()
         self.rect = (0, 0)
         self.life = 3
         self.score = 0

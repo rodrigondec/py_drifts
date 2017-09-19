@@ -21,7 +21,7 @@ class Drifts:
         self._display = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
 
-        self._sprites['player'] = Player(TextureBank['PLAYER'])
+        self._sprites['player'] = Player()
 
     def on_event(self, event):
         if event.type == pygame.QUIT:

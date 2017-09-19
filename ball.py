@@ -26,11 +26,8 @@ class Ball(pygame.sprite.Sprite):
 
         self.stoped()
 
-    def move(self):
-        self.rect = (self.rect[0]+self.accel_x, self.rect[1]+self.accel_y)
-
     def update(self):
-        self.rect = pygame.mouse.get_pos()
+        self.rect = (self.rect[0] + self.accel_x, self.rect[1] + self.accel_y)
 
     def invert_accel_x(self):
         if randrange(0, 3) == 1:
@@ -76,11 +73,11 @@ class Pointer(Ball):
         y = self.bola_to_mouse[0][1] + (pygame.mouse.get_pos()[1] - self.bola_to_mouse[1][1])
         self.rect = (x, y)
 
-    def move(self):
+    def update(self):
         if self.attached:
             self.follow_mouse()
         else:
-            Ball.move(self)
+            Ball.update(self)
 
 
 class Murderer(Ball):
